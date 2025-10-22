@@ -1,0 +1,242 @@
+{
+  "id": "two_sum",
+  "title": "Two Sum — A complete, student-friendly guide",
+  "difficulty": "easy",
+  "topics": [
+    "Array",
+    "Hash Table"
+  ],
+  "goal": "Given an array nums and an integer target, return the indices of the two numbers that add up to target. Exactly one solution exists; you may not use the same element twice.",
+  "sections": [
+    {
+      "type": "text",
+      "title": "Problem understanding",
+      "content": "You are given an array of integers `nums` and a number `target`. Find two **different elements** in the list whose sum equals `target` and return their indices.\n\n### Key details\n- **Input:** `nums` (array of integers), `target` (integer)\n- **Output:** a pair of indices `[i, j]` such that `nums[i] + nums[j] == target`\n- **Guarantee:** exactly one valid answer exists\n- You **cannot reuse** the same element twice (`i != j`)\n\n**Why this matters:** this problem tests how you choose data structures and optimize from O(n²) to O(n) by using hash maps.",
+      "ai_chat_history": []
+    },
+    {
+      "type": "text",
+      "title": "Concept explanation — intuition & data structures",
+      "content": "Two natural ways to approach this problem:\n\n1. **Brute force:** check all pairs `(i, j)` → O(n²)\n2. **Use a hash table:** store seen numbers → O(n)\n\nFor each number `x`, compute its complement `need = target - x` and check if it's already in the map.\n\nThis works because hash lookups and insertions take **O(1)** on average — turning an O(n²) nested loop into a single O(n) pass.",
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Brute force approach",
+      "description": "Implement the O(n²) brute-force approach that checks all pairs.",
+      "starter_code": "function twoSumBruteForce(nums, target) {\n  const n = nums.length;\n  for (let i = 0; i < n; i++) {\n    for (let j = i + 1; j < n; j++) {\n      if (nums[i] + nums[j] === target) {\n        return [i, j];\n      }\n    }\n  }\n  throw new Error('No two sum solution');\n}",
+      "tests": [
+        {
+          "input": {
+            "nums": [
+              2,
+              7,
+              11,
+              15
+            ],
+            "target": 9
+          },
+          "expected": [
+            0,
+            1
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              2,
+              4
+            ],
+            "target": 6
+          },
+          "expected": [
+            1,
+            2
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              3
+            ],
+            "target": 6
+          },
+          "expected": [
+            0,
+            1
+          ]
+        }
+      ],
+      "hints": [
+        "Use two nested loops.",
+        "Ensure `i != j` to avoid using the same element twice."
+      ],
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Hash table (one-pass) — optimal solution",
+      "description": "Implement the optimal O(n) solution using a hash map to store complements.",
+      "starter_code": "function twoSum(nums, target) {\n  const seen = {};\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    if (need in seen) {\n      return [seen[need], i];\n    }\n    seen[nums[i]] = i;\n  }\n  throw new Error('No two sum solution');\n}",
+      "tests": [
+        {
+          "input": {
+            "nums": [
+              2,
+              7,
+              11,
+              15
+            ],
+            "target": 9
+          },
+          "expected": [
+            0,
+            1
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              2,
+              4
+            ],
+            "target": 6
+          },
+          "expected": [
+            1,
+            2
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              3
+            ],
+            "target": 6
+          },
+          "expected": [
+            0,
+            1
+          ]
+        }
+      ],
+      "hints": [
+        "Check if the complement exists before inserting the current value.",
+        "This prevents matching the same element twice."
+      ],
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Two-pass hash table (alternative)",
+      "description": "Implement a two-pass version of the hash map approach.",
+      "starter_code": "function twoSumTwoPass(nums, target) {\n  const mapVals = {};\n  for (let i = 0; i < nums.length; i++) {\n    mapVals[nums[i]] = i;\n  }\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    if (need in mapVals && mapVals[need] !== i) {\n      return [i, mapVals[need]];\n    }\n  }\n  throw new Error('No two sum solution');\n}",
+      "tests": [
+        {
+          "input": {
+            "nums": [
+              2,
+              7,
+              11,
+              15
+            ],
+            "target": 9
+          },
+          "expected": [
+            0,
+            1
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              2,
+              4
+            ],
+            "target": 6
+          },
+          "expected": [
+            1,
+            2
+          ]
+        }
+      ],
+      "hints": [
+        "First pass builds map value → index.",
+        "Second pass checks complements."
+      ],
+      "ai_chat_history": []
+    },
+    {
+      "type": "text",
+      "title": "Complexity analysis",
+      "content": "**Brute force:** O(n²) time, O(1) space.\n\n**Hash table (one-pass):** O(n) average time, O(n) space.\n\nWhy O(n)? Because hash operations — lookup and insert — take constant time on average.\nReplacing a nested loop with O(1) lookups dramatically improves efficiency.",
+      "ai_chat_history": []
+    },
+    {
+      "type": "text",
+      "title": "Edge cases & common mistakes",
+      "content": "### Edge cases\n1. **Duplicates:** `[3,3]`, target `6` → works fine.\n2. **Negatives:** handled naturally with `need = target - x`.\n3. **Zeros:** e.g., `[0,4,3,0]`, target `0` → fine.\n4. **Large values:** within integer limits.\n\n### Common mistakes\n- Inserting the current number before checking its complement.\n- Returning values instead of indices.\n- Forgetting duplicates or negative numbers.\n- Using `.indexOf()` in loops — causes O(n²) slowdown.",
+      "ai_chat_history": []
+    },
+    {
+      "type": "text",
+      "title": "Summary & Tips",
+      "content": "### Key takeaways\n- **Recognize the pattern:** complement + hash map.\n- **Hash tables trade space for time:** O(n) memory, O(n) time.\n- **Order matters:** check first, insert later.\n- **Practice variants:** 3Sum, 4Sum, Two Sum II (sorted array), Subarray Sum Equals K.\n\n### Checklist for interviews\n✅ Start with brute force, explain O(n²)\n✅ Propose O(n) hash-table optimization\n✅ Discuss edge cases\n✅ Write clean, commented code\n✅ Justify complexity clearly\n✅ Mention trade-offs (time vs space)",
+      "ai_chat_history": []
+    },
+    {
+      "type": "quiz",
+      "title": "Quick check",
+      "questions": [
+        {
+          "question": "What is the time complexity of the hash map solution?",
+          "options": [
+            "O(n²)",
+            "O(log n)",
+            "O(n)",
+            "O(1)"
+          ],
+          "answer": "O(n)"
+        },
+        {
+          "question": "Why must we check the complement before inserting the current value?",
+          "options": [
+            "To avoid matching the same element twice",
+            "To ensure minimal space usage",
+            "To handle negative numbers",
+            "It doesn’t matter"
+          ],
+          "answer": "To avoid matching the same element twice"
+        },
+        {
+          "question": "What is the space complexity of the one-pass hash map approach?",
+          "options": [
+            "O(1)",
+            "O(log n)",
+            "O(n)",
+            "O(n²)"
+          ],
+          "answer": "O(n)"
+        },
+        {
+          "question": "Which data structure enables the O(1) lookups in this problem?",
+          "options": [
+            "Array",
+            "Stack",
+            "Hash Table",
+            "Linked List"
+          ],
+          "answer": "Hash Table"
+        }
+      ],
+      "ai_chat_history": []
+    }
+  ],
+  "created_at": "2025-10-22T15:35:20.322648Z"
+}

@@ -1,0 +1,221 @@
+{
+  "id": "two_sum",
+  "title": "Two Sum — A complete, student-friendly guide",
+  "difficulty": "Easy",
+  "topics": [
+    "Array",
+    "Hash Table"
+  ],
+  "goal": "Given an array nums and an integer target, return the indices of the two numbers that add up to target. Exactly one solution exists; you may not use the same element twice.",
+  "sections": [
+    {
+      "type": "text",
+      "title": "Problem understanding",
+      "content": "You are given a list of integers and a number target. Find two different elements in the list whose sum equals target and return their indices. Order of the indices does not matter. The problem guarantees exactly one valid answer exists. You cannot use the same element twice.",
+      "ai_chat_history": []
+    },
+    {
+      "type": "text",
+      "title": "Concept explanation — intuition & data structures",
+      "content": "Two main approaches: 1) brute force O(n²) and 2) hash table O(n). Hash tables allow constant-time lookups, replacing an inner loop with an O(1) operation. For each number x, compute complement = target - x and check if it’s in the map.",
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Brute Force Approach",
+      "description": "Implement the O(n²) brute-force approach for small arrays.",
+      "starter_code": "function twoSum(nums, target) {\n    const n = nums.length;\n    for (let i = 0; i < n; i++) {\n        for (let j = i + 1; j < n; j++) {\n            if (nums[i] + nums[j] === target) {\n                return [i, j];\n            }\n        }\n    }\n    throw new Error('No two sum solution');\n}",
+      "tests": [
+        {
+          "input": {
+            "nums": [
+              2,
+              7,
+              11,
+              15
+            ],
+            "target": 9
+          },
+          "expected": [
+            0,
+            1
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              2,
+              4
+            ],
+            "target": 6
+          },
+          "expected": [
+            1,
+            2
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              3
+            ],
+            "target": 6
+          },
+          "expected": [
+            0,
+            1
+          ]
+        }
+      ],
+      "hints": [
+        "Use two nested loops.",
+        "Ensure i != j to avoid reusing same element."
+      ],
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Hash Table (One-pass) — Optimal Solution",
+      "description": "Implement the optimal O(n) solution using a hash map.",
+      "starter_code": "function twoSum(nums, target) {\n    const seen = {};\n    for (let i = 0; i < nums.length; i++) {\n        const need = target - nums[i];\n        if (need in seen) {\n            return [seen[need], i];\n        }\n        seen[nums[i]] = i;\n    }\n    throw new Error('No two sum solution');\n}",
+      "tests": [
+        {
+          "input": {
+            "nums": [
+              2,
+              7,
+              11,
+              15
+            ],
+            "target": 9
+          },
+          "expected": [
+            0,
+            1
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              2,
+              4
+            ],
+            "target": 6
+          },
+          "expected": [
+            1,
+            2
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              3
+            ],
+            "target": 6
+          },
+          "expected": [
+            0,
+            1
+          ]
+        }
+      ],
+      "hints": [
+        "Compute complement = target - x.",
+        "Check if complement is already in map before inserting current value."
+      ],
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Two-pass Hash Table (Alternative)",
+      "description": "Implement the two-pass hash map approach.",
+      "starter_code": "function twoSumTwopass(nums, target) {\n    const mapVals = {};\n    for (let i = 0; i < nums.length; i++) {\n        mapVals[nums[i]] = i;\n    }\n    for (let i = 0; i < nums.length; i++) {\n        const need = target - nums[i];\n        if (need in mapVals && mapVals[need] !== i) {\n            return [i, mapVals[need]];\n        }\n    }\n    throw new Error('No two sum solution');\n}",
+      "tests": [
+        {
+          "input": {
+            "nums": [
+              2,
+              7,
+              11,
+              15
+            ],
+            "target": 9
+          },
+          "expected": [
+            0,
+            1
+          ]
+        },
+        {
+          "input": {
+            "nums": [
+              3,
+              2,
+              4
+            ],
+            "target": 6
+          },
+          "expected": [
+            1,
+            2
+          ]
+        }
+      ],
+      "hints": [
+        "First pass: build map value→index.",
+        "Second pass: find complement."
+      ],
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Implementation — commented Python example",
+      "description": "A clean, readable implementation with comments.",
+      "starter_code": "function twoSum(nums, target) {\n    // Return indices of two numbers adding up to target.\n    const seen = {};\n    for (let i = 0; i < nums.length; i++) {\n        const need = target - nums[i];\n        if (need in seen) {\n            return [seen[need], i];\n        }\n        seen[nums[i]] = i;\n    }\n    throw new Error('No two sum solution');\n}",
+      "tests": [],
+      "hints": [
+        "Add comments explaining each step."
+      ],
+      "ai_chat_history": []
+    },
+    {
+      "type": "text",
+      "title": "Analysis, tips, and follow-ups",
+      "content": "### Complexity analysis\nBrute force: O(n²) time, O(1) space. Hash map: O(n) average time, O(n) space. Hash lookups are O(1) average, replacing the inner loop with constant-time access.\n\n### Edge cases & common mistakes\nConsider duplicates, negatives, zeros, large integers. Avoid checking complement after inserting current element; ensure correct index order.\n\n### Learning tips — what to take away\nRecognize the complement + hash map pattern, understand trade-offs between time and space, and practice variations such as 3Sum, Two Sum II.\n\n### Variations & follow-ups\nTwo Sum II (sorted input), All pairs summing to target, K-sum family problems. Discuss how two-pointer and sorting approaches differ.\n\n### Final notes (checklist for interviews)\nExplain brute force first, then optimize to hash map. Discuss edge cases, write clean code, and justify O(n) complexity clearly.",
+      "ai_chat_history": []
+    },
+    {
+      "type": "quiz",
+      "title": "Quick check",
+      "questions": [
+        {
+          "question": "What is the average time complexity of the hash map solution?",
+          "options": [
+            "O(n²)",
+            "O(log n)",
+            "O(n)",
+            "O(1)"
+          ],
+          "answer": "O(n)"
+        },
+        {
+          "question": "Why check for the complement before inserting the current element?",
+          "options": [
+            "To avoid matching the same element twice",
+            "To ensure smallest index",
+            "To handle negatives",
+            "It doesn’t matter"
+          ],
+          "answer": "To avoid matching the same element twice"
+        }
+      ],
+      "ai_chat_history": []
+    }
+  ],
+  "created_at": "2025-10-21T16:43:50.397548Z"
+}
