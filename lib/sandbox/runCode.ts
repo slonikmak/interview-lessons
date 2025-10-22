@@ -63,6 +63,14 @@ async function runSingleTest(
   test: TestCase,
   timeoutMs: number
 ): Promise<TestResult> {
+  if (test.input === undefined || test.expected === undefined) {
+    return {
+      name: test.name,
+      status: 'failed',
+      error: 'Test case missing input or expected value',
+    };
+  }
+
   // Execute the test inside a Worker so that synchronous infinite loops
   // can be terminated by the main thread via worker.terminate().
   

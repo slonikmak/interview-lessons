@@ -12,8 +12,8 @@ export type ChatMessage = z.infer<typeof ChatMessageSchema>;
 // ----- Raw schemas that mirror the canonical lesson JSON structure -----
 const RawTestCaseSchema = z.object({
   name: z.string().optional(),
-  input: z.unknown(),
-  expected: z.unknown(),
+  input: z.unknown().optional(),
+  expected: z.unknown().optional(),
 });
 
 const RawTextSectionSchema = z.object({
@@ -65,14 +65,14 @@ const RawLessonSchema = z.object({
 // ----- Normalized application-facing types -----
 export type TestCase = {
   name: string;
-  input: unknown;
-  expected: unknown;
+  input?: unknown;
+  expected?: unknown;
 };
 
 export const TestCaseSchema = z.object({
   name: z.string(),
-  input: z.unknown(),
-  expected: z.unknown(),
+  input: z.unknown().optional(),
+  expected: z.unknown().optional(),
 });
 
 export type QuizOption = {
