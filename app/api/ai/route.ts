@@ -74,7 +74,7 @@ function buildContextPrompt(
     content?: string;
     metadata?: Record<string, unknown>;
   },
-  history?: Array<{ role: string; text: string }>
+  history?: Array<{ role: string; text: string; code?: string }>
 ): string {
   let prompt = `You are a helpful coding tutor assistant. You're helping a student with a lesson section.\n\n`;
   prompt += `Section: ${sectionContext.title}\n`;
@@ -97,6 +97,9 @@ function buildContextPrompt(
     prompt += `Previous conversation:\n`;
     for (const msg of history) {
       prompt += `${msg.role}: ${msg.text}\n`;
+      if (msg.code) {
+        prompt += `[User's current code]:\n${msg.code}\n`;
+      }
     }
     prompt += `\n`;
   }

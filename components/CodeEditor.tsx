@@ -13,6 +13,11 @@ export default function CodeEditor({ initialCode, onCodeChange }: CodeEditorProp
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLDivElement>(null);
 
+  // Sync with external code changes (e.g., when solution is shown)
+  useEffect(() => {
+    setCode(initialCode);
+  }, [initialCode]);
+
   // Auto-resize textarea based on content
   useEffect(() => {
     if (textareaRef.current) {

@@ -5,6 +5,7 @@ export const ChatMessageSchema = z.object({
   role: z.enum(['user', 'assistant']),
   text: z.string(),
   ts: z.number().optional(),
+  code: z.string().optional(), // User's code from editor (for code_task sections)
 });
 
 export type ChatMessage = z.infer<typeof ChatMessageSchema>;
@@ -28,8 +29,10 @@ const RawCodeTaskSectionSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
   starter_code: z.string(),
+  solution_code: z.string().optional(), // Reference solution shown when SKIPPED
   tests: z.array(RawTestCaseSchema).optional(),
   hints: z.array(z.string()).optional(),
+  state: z.enum(['NOT_RESOLVED', 'RESOLVED', 'SKIPPED']).optional(),
   ai_chat_history: z.array(ChatMessageSchema).optional(),
 });
 
@@ -101,8 +104,10 @@ export type CodeTaskSection = {
   title: string;
   description?: string;
   starter_code: string;
+  solution_code?: string; // Reference solution
   tests: TestCase[];
   hints?: string[];
+  state?: 'NOT_RESOLVED' | 'RESOLVED' | 'SKIPPED';
   ai_chat_history: ChatMessage[];
 };
 
@@ -191,8 +196,10 @@ function normalizeSection(rawSection: z.infer<typeof RawSectionSchema>, index: n
         title: rawSection.title,
         description: rawSection.description,
         starter_code: rawSection.starter_code,
+        solution_code: rawSection.solution_code,
         tests: normalizeTestCases(rawSection.tests),
         hints: rawSection.hints,
+        state: rawSection.state ?? 'NOT_RESOLVED',
         ai_chat_history: rawSection.ai_chat_history ?? [],
       };
     case 'quiz':

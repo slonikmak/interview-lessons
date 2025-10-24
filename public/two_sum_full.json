@@ -1,7 +1,7 @@
 {
   "id": "two_sum",
   "title": "Two Sum — A complete, student-friendly guide",
-  "difficulty": "easy",
+  "difficulty": "Easy",
   "topics": [
     "Array",
     "Hash Table"
@@ -11,20 +11,22 @@
     {
       "type": "text",
       "title": "Problem understanding",
-      "content": "You are given an array of integers `nums` and a number `target`. Find two **different elements** in the list whose sum equals `target` and return their indices.\n\n### Key details\n- **Input:** `nums` (array of integers), `target` (integer)\n- **Output:** a pair of indices `[i, j]` such that `nums[i] + nums[j] == target`\n- **Guarantee:** exactly one valid answer exists\n- You **cannot reuse** the same element twice (`i != j`)\n\n**Why this matters:** this problem tests how you choose data structures and optimize from O(n²) to O(n) by using hash maps.",
+      "content": "### Problem Statement\n\nYou are given a list of integers and a number target. Find two different elements in the list whose sum equals target and return their indices. Order of the indices does not matter. The problem guarantees exactly one valid answer exists. You cannot use the same element twice.\n\n### Key details\n- **Input**: `nums` (array of integers), `target` (integer)\n- **Output**: a pair of indices `[i, j]` such that `nums[i] + nums[j] == target`\n- **Guarantee**: exactly one valid answer exists (you can return the first you find)\n- **Constraint**: You may not use the same element twice (`i != j`)\n- **Constraints**: `2 <= nums.length <= 10^4`, values up to ±`10^9` (aim for O(n) time)\n\n**Why this matters**: this problem tests recognizing the complement + hash map pattern and trading space for time to move from O(n²) to O(n).",
       "ai_chat_history": []
     },
     {
       "type": "text",
       "title": "Concept explanation — intuition & data structures",
-      "content": "Two natural ways to approach this problem:\n\n1. **Brute force:** check all pairs `(i, j)` → O(n²)\n2. **Use a hash table:** store seen numbers → O(n)\n\nFor each number `x`, compute its complement `need = target - x` and check if it's already in the map.\n\nThis works because hash lookups and insertions take **O(1)** on average — turning an O(n²) nested loop into a single O(n) pass.",
+      "content": "### Two Main Approaches\n\n1. **Brute Force**: O(n²) time complexity. Checks every pair of elements.\n2. **Hash Table**: O(n) time complexity. Uses a hash map for constant-time lookups.\n\n**How Hash Tables Help**: They allow constant-time lookups, replacing an inner loop with an O(1) operation. For each number `x`, compute `complement = target - x` and check if it's in the map.",
       "ai_chat_history": []
     },
+    
     {
       "type": "code_task",
-      "title": "Brute force approach",
-      "description": "Implement the O(n²) brute-force approach that checks all pairs.",
-      "starter_code": "function twoSumBruteForce(nums, target) {\n  const n = nums.length;\n  for (let i = 0; i < n; i++) {\n    for (let j = i + 1; j < n; j++) {\n      if (nums[i] + nums[j] === target) {\n        return [i, j];\n      }\n    }\n  }\n  throw new Error('No two sum solution');\n}",
+      "title": "Brute Force Approach",
+      "description": "### Task\nImplement the **O(n²)** brute-force approach for small arrays.\n\n### Overview\n- **Time Complexity**: O(n²)\n- **Space Complexity**: O(1)\n- **Approach**: Checks every pair `(i, j)` and returns when `nums[i] + nums[j] == target`.",
+      "starter_code": "function twoSum(nums, target) {\n  // TODO: check every pair (i, j)\n  // and return indices if nums[i] + nums[j] === target\n}",
+      "solution_code": "function twoSum(nums, target) {\n  const n = nums.length;\n  for (let i = 0; i < n; i++) {\n    for (let j = i + 1; j < n; j++) {\n      if (nums[i] + nums[j] === target) {\n        return [i, j];\n      }\n    }\n  }\n  throw new Error('No two sum solution');\n}",
       "tests": [
         {
           "input": {
@@ -71,15 +73,17 @@
       ],
       "hints": [
         "Use two nested loops.",
-        "Ensure `i != j` to avoid using the same element twice."
+        "Ensure i != j to avoid reusing same element."
       ],
+      "state": "NOT_RESOLVED",
       "ai_chat_history": []
     },
     {
       "type": "code_task",
-      "title": "Hash table (one-pass) — optimal solution",
-      "description": "Implement the optimal O(n) solution using a hash map to store complements.",
-      "starter_code": "function twoSum(nums, target) {\n  const seen = {};\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    if (need in seen) {\n      return [seen[need], i];\n    }\n    seen[nums[i]] = i;\n  }\n  throw new Error('No two sum solution');\n}",
+      "title": "Hash Table (One-pass) — Optimal Solution",
+      "description": "### Task\nImplement the optimal **O(n)** solution using a hash map.\n\n### Overview\n- **Time Complexity**: O(n) average\n- **Space Complexity**: O(n)\n- **Approach**: One-pass hash table — iterate once, keep a map `value → index` for seen numbers. For current `x`, compute `need = target - x`; if `need` is in the map, return `[map[need], i]`; otherwise store `x → i`.\n\n### Correctness\nLet the answer be indices `a < b`. When the loop reaches `b`, `nums[a]` is already stored, so `need = target - nums[b]` equals `nums[a]` and we return `[a, b]`.",
+      "starter_code": "function twoSum(nums, target) {\n  // TODO: use a hash map to store values\n  // check if complement exists before inserting current number\n}",
+      "solution_code": "function twoSum(nums, target) {\n  const seen = {};\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    if (need in seen) {\n      return [seen[need], i];\n    }\n    seen[nums[i]] = i;\n  }\n  throw new Error('No two sum solution');\n}",
       "tests": [
         {
           "input": {
@@ -125,16 +129,18 @@
         }
       ],
       "hints": [
-        "Check if the complement exists before inserting the current value.",
-        "This prevents matching the same element twice."
+        "Compute complement = target - x.",
+        "Check if complement is already in map before inserting current value."
       ],
+      "state": "NOT_RESOLVED",
       "ai_chat_history": []
     },
     {
       "type": "code_task",
-      "title": "Two-pass hash table (alternative)",
-      "description": "Implement a two-pass version of the hash map approach.",
-      "starter_code": "function twoSumTwoPass(nums, target) {\n  const mapVals = {};\n  for (let i = 0; i < nums.length; i++) {\n    mapVals[nums[i]] = i;\n  }\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    if (need in mapVals && mapVals[need] !== i) {\n      return [i, mapVals[need]];\n    }\n  }\n  throw new Error('No two sum solution');\n}",
+      "title": "Two-pass Hash Table (Alternative)",
+      "description": "### Task\nImplement the two-pass hash map approach.\n\n### Overview\n- **Time Complexity**: O(n)\n- **Space Complexity**: O(n)\n- **Approach**: First build `value → index` for all elements, then scan again to find complements (ensure you don't use the same index twice).",
+      "starter_code": "function twoSumTwopass(nums, target) {\n  // TODO: first build map of value -> index\n  // then loop again to find complement\n}",
+      "solution_code": "function twoSumTwopass(nums, target) {\n  const mapVals = {};\n  for (let i = 0; i < nums.length; i++) {\n    mapVals[nums[i]] = i;\n  }\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    if (need in mapVals && mapVals[need] !== i) {\n      return [i, mapVals[need]];\n    }\n  }\n  throw new Error('No two sum solution');\n}",
       "tests": [
         {
           "input": {
@@ -167,27 +173,29 @@
         }
       ],
       "hints": [
-        "First pass builds map value → index.",
-        "Second pass checks complements."
+        "First pass: build map value→index.",
+        "Second pass: find complement."
       ],
+      "state": "NOT_RESOLVED",
+      "ai_chat_history": []
+    },
+    {
+      "type": "code_task",
+      "title": "Implementation — commented example",
+      "description": "### Task\nWrite a clean, commented implementation showing each step.\n\n### Overview\n- **Time Complexity**: O(n) average\n- **Space Complexity**: O(n)\n- **Approach**: One-pass hash table — iterate once, keep `value → index`; for current `x`, check `need = target - x` before inserting to avoid using the same element twice.\n\n### Correctness\nLet `a < b` be the solution; by the time you process `b`, `nums[a]` is in the map, so you return `[a, b]`.",
+      "starter_code": "function twoSum(nums, target) {\n  // TODO: add comments explaining each step of the hash map logic\n}",
+      "solution_code": "function twoSum(nums, target) {\n  // Return indices of two numbers adding up to target.\n  const seen = {};\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    // If complement was already seen, return indices\n    if (need in seen) {\n      return [seen[need], i];\n    }\n    // Otherwise record this number\n    seen[nums[i]] = i;\n  }\n  throw new Error('No two sum solution');\n}",
+      "tests": [],
+      "hints": [
+        "Add comments explaining each step."
+      ],
+      "state": "NOT_RESOLVED",
       "ai_chat_history": []
     },
     {
       "type": "text",
-      "title": "Complexity analysis",
-      "content": "**Brute force:** O(n²) time, O(1) space.\n\n**Hash table (one-pass):** O(n) average time, O(n) space.\n\nWhy O(n)? Because hash operations — lookup and insert — take constant time on average.\nReplacing a nested loop with O(1) lookups dramatically improves efficiency.",
-      "ai_chat_history": []
-    },
-    {
-      "type": "text",
-      "title": "Edge cases & common mistakes",
-      "content": "### Edge cases\n1. **Duplicates:** `[3,3]`, target `6` → works fine.\n2. **Negatives:** handled naturally with `need = target - x`.\n3. **Zeros:** e.g., `[0,4,3,0]`, target `0` → fine.\n4. **Large values:** within integer limits.\n\n### Common mistakes\n- Inserting the current number before checking its complement.\n- Returning values instead of indices.\n- Forgetting duplicates or negative numbers.\n- Using `.indexOf()` in loops — causes O(n²) slowdown.",
-      "ai_chat_history": []
-    },
-    {
-      "type": "text",
-      "title": "Summary & Tips",
-      "content": "### Key takeaways\n- **Recognize the pattern:** complement + hash map.\n- **Hash tables trade space for time:** O(n) memory, O(n) time.\n- **Order matters:** check first, insert later.\n- **Practice variants:** 3Sum, 4Sum, Two Sum II (sorted array), Subarray Sum Equals K.\n\n### Checklist for interviews\n✅ Start with brute force, explain O(n²)\n✅ Propose O(n) hash-table optimization\n✅ Discuss edge cases\n✅ Write clean, commented code\n✅ Justify complexity clearly\n✅ Mention trade-offs (time vs space)",
+      "title": "Analysis, tips, and follow-ups",
+      "content": "### Complexity analysis\n- Brute force: O(n²) time, O(1) space.\n- Hash map (one-pass): O(n) average time, O(n) space.\n\nWhy O(n)? Hash table lookups/inserts are average O(1), replacing an inner scan.\n\n### Correctness notes (one-pass)\n- Check complement before inserting current value to avoid using the same element twice when `need == x`.\n- If the answer is at indices a < b, by the time you process b, `nums[a]` is already recorded, so you return `[a, b]`.\n\n### Edge cases\n- Duplicates (e.g., `[3,3]`, target `6`) → returns `[0,1]`.\n- Negatives and zeros are handled naturally by `need = target - x`.\n- Large values (±1e9) are fine for standard integer arithmetic in JS.\n\n### Common mistakes\n- Inserting the current number before checking its complement.\n- Returning values instead of indices.\n- Forgetting duplicates or negative numbers.\n- Using `.indexOf()`/`.includes()` inside loops → accidental O(n²).\n\n### Learning tips — what to take away\n- Recognize the complement + hash map pattern.\n- Understand the time/space trade-off: O(n) time for O(n) extra memory.\n- Order of operations matters: check first, then insert.\n- Practice variants: k‑sum family, Two Sum II, subarray sum equals k.\n\n### Variations & follow-ups\n- Two Sum II (sorted input): two pointers in O(n) time and O(1) space; if you need original indices, track them before sorting.\n- All pairs summing to target (return many pairs).\n- K-sum problems (reduce to two-sum or use sorting + two pointers).\n\n### Final notes (interview checklist)\nStart with brute force (O(n²)), then optimize to a one-pass hash map (O(n)). Cover edge cases, explain why you check before insert, and justify complexities clearly.",
       "ai_chat_history": []
     },
     {
@@ -195,7 +203,7 @@
       "title": "Quick check",
       "questions": [
         {
-          "question": "What is the time complexity of the hash map solution?",
+          "question": "What is the average time complexity of the hash map solution?",
           "options": [
             "O(n²)",
             "O(log n)",
@@ -205,38 +213,18 @@
           "answer": "O(n)"
         },
         {
-          "question": "Why must we check the complement before inserting the current value?",
+          "question": "Why check for the complement before inserting the current element?",
           "options": [
             "To avoid matching the same element twice",
-            "To ensure minimal space usage",
-            "To handle negative numbers",
+            "To ensure smallest index",
+            "To handle negatives",
             "It doesn’t matter"
           ],
           "answer": "To avoid matching the same element twice"
-        },
-        {
-          "question": "What is the space complexity of the one-pass hash map approach?",
-          "options": [
-            "O(1)",
-            "O(log n)",
-            "O(n)",
-            "O(n²)"
-          ],
-          "answer": "O(n)"
-        },
-        {
-          "question": "Which data structure enables the O(1) lookups in this problem?",
-          "options": [
-            "Array",
-            "Stack",
-            "Hash Table",
-            "Linked List"
-          ],
-          "answer": "Hash Table"
         }
       ],
       "ai_chat_history": []
     }
   ],
-  "created_at": "2025-10-22T15:35:20.322648Z"
+  "created_at": "2025-10-24T07:21:32.558646Z"
 }

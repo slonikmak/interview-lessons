@@ -7,12 +7,14 @@ interface SectionChatProps {
   sectionId: string;
   sectionContext: SectionContext;
   initialHistory?: ChatMessage[];
+  currentCode?: string; // Current code from editor (for code_task sections)
 }
 
 export default function SectionChat({
   sectionId,
   sectionContext,
   initialHistory = [],
+  currentCode,
 }: SectionChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>(initialHistory);
   const [inputText, setInputText] = useState('');
@@ -27,6 +29,7 @@ export default function SectionChat({
       role: 'user',
       text: inputText,
       ts: Date.now(),
+      ...(currentCode && { code: currentCode }), // Include current code if available
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -167,6 +170,16 @@ export default function SectionChat({
                     <p className="text-sm whitespace-pre-wrap text-gray-800 dark:text-gray-200">
                       {msg.text}
                     </p>
+                    {msg.code && (
+                      <details className="mt-2">
+                        <summary className="cursor-pointer text-xs text-blue-600 dark:text-blue-400">
+                          View code context
+                        </summary>
+                        <pre className="mt-2 p-2 bg-gray-800 dark:bg-gray-950 text-gray-100 text-xs rounded overflow-x-auto">
+                          <code>{msg.code}</code>
+                        </pre>
+                      </details>
+                    )}
                   </div>
                 ))}
               </div>
